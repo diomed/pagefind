@@ -25,7 +25,33 @@ An all-in-one search component combining input, results dropdown, and keyboard n
 | `show-sub-results` | boolean | `false` | Show anchor-based sub-results in dropdown |
 | `show-keyboard-hints` | boolean | `true` | Show keyboard navigation hints in footer |
 | `autofocus` | boolean | `false` | Focus input on page load |
+| `shortcut` | string | `"mod+k"` | Keyboard shortcut to focus the input |
+| `hide-shortcut` | boolean | `false` | Hide the keyboard shortcut display |
 | `instance` | string | `"default"` | Connect to a specific Pagefind instance |
+
+## Keyboard Shortcut
+
+By default, the searchbox listens for `Cmd+K` (Mac) or `Ctrl+K` (Windows/Linux) to focus the input, and displays the shortcut hint inside the input field.
+
+```html
+<!-- Default: Cmd+K / Ctrl+K -->
+<pagefind-searchbox></pagefind-searchbox>
+
+<!-- Custom shortcut -->
+<pagefind-searchbox shortcut="/"></pagefind-searchbox>
+
+<!-- Hide the visual shortcut hint -->
+<pagefind-searchbox hide-shortcut></pagefind-searchbox>
+```
+
+The `mod` modifier is platform-aware: it becomes `Ctrl` on Windows/Linux and `Cmd` on Mac.
+
+Supported syntax:
+
+- **Platform modifier:** `mod` (Ctrl on Windows/Linux, Cmd on Mac)
+- **Explicit modifiers:** `ctrl`, `shift`, `alt`, `cmd`/`meta`
+- **Keys:** Any single character (e.g. `k`, `/`) or key name
+- **Case-insensitive:** Keys are normalized to lowercase
 
 ## Keyboard Navigation
 
