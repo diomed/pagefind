@@ -11,18 +11,23 @@ export interface KeyBinding {
   key: string;
 }
 
+let _isMac: boolean | null = null;
+
 export function detectMac(): boolean {
+  if (_isMac !== null) return _isMac;
   try {
     const uaData = (
       navigator as Navigator & { userAgentData?: NavigatorUAData }
     ).userAgentData;
     if (uaData?.platform) {
-      return uaData.platform.toLowerCase().includes("mac");
+      _isMac = uaData.platform.toLowerCase().includes("mac");
+      return _isMac;
     }
   } catch {
     // Fall back to userAgent check
   }
-  return /mac/i.test(navigator.userAgent);
+  _isMac = /mac/i.test(navigator.userAgent);
+  return _isMac;
 }
 
 export function parseKeyBinding(bindingStr: string): KeyBinding {
@@ -95,7 +100,7 @@ export function getShortcutDisplay(binding: KeyBinding): {
     ariaParts.push(isMac ? "Meta" : "Control");
   }
   if (binding.meta) {
-    keys.push(isMac ? "⌘" : "⊞");
+    keys.push(isMac ? "⌘" : "Win");
     ariaParts.push("Meta");
   }
   if (binding.ctrl) {
@@ -111,9 +116,8 @@ export function getShortcutDisplay(binding: KeyBinding): {
     ariaParts.push("Alt");
   }
 
-  const keyDisplay = binding.key.toUpperCase();
-  keys.push(keyDisplay);
-  ariaParts.push(keyDisplay);
+  keys.push(binding.key.toUpperCase());
+  ariaParts.push(binding.key);
 
   return { keys, aria: ariaParts.join("+") };
 }
