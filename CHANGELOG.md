@@ -9,6 +9,8 @@
 
 ## Unreleased
 
+## v1.5.0-beta.2 (April 3, 2026)
+
 Changes since v1.5.0-beta.1:
 
 - New: Greek translations
