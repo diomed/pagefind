@@ -39,6 +39,10 @@ jobs:
             os: windows-latest
             target: x86_64-pc-windows-msvc
             cross: false
+          - build: windows-arm64
+            os: windows-11-arm
+            target: aarch64-pc-windows-msvc
+            cross: false
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -81,6 +85,16 @@ jobs:
         uses: jetli/wasm-pack-action@v0.4.0
         with:
           version: ${{env.WASM_PACK_VERSION}}
+
+      - name: Check Unix tools availability
+        if: matrix.build == 'windows-arm64'
+        run: |
+          echo "Shell: $SHELL"
+          echo "Bash: $(bash --version | head -1)"
+          which gzip && gzip --version | head -1 || echo "gzip: NOT FOUND"
+          which grep && grep --version | head -1 || echo "grep: NOT FOUND"
+          which printf || echo "printf: NOT FOUND"
+          which cat || echo "cat: NOT FOUND"
 
       - name: Build WASM
         working-directory: ./pagefind_web
@@ -144,7 +158,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: pagefind-${{ matrix.target }}
-          path: target/release/pagefind${{ matrix.build == 'windows' && '.exe' || '' }}
+          path: target/release/pagefind${{ startsWith(matrix.build, 'windows') && '.exe' || '' }}
       
       - name: Upload Testing Binary (FreeBSD)
         uses: actions/upload-artifact@v7
