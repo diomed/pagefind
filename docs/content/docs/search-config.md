@@ -96,9 +96,11 @@ configureInstance("default", {
 {{< tab "Search API" "sync-cfg-searchapi" >}}
 ```js
 await pagefind.options({
-+    bundlePath: "/subpath/pagefind/"
++    basePath: "/subpath/pagefind/"
 });
 ```
+
+> Note: When using the Search API directly, the option is called `basePath`. It is usually auto-detected from the URL used to import `pagefind.js`, so you only need to set it if auto-detection fails.
 {{< /tab >}}
 {{< /tabs >}}
 
@@ -184,6 +186,34 @@ await pagefind.options({
 {{< /tab >}}
 {{< /tabs >}}
 
+### Meta cache tag
+
+By default, Pagefind appends a timestamp to the metadata request to ensure fresh data. If you're building a PWA or offline-capable site, set this to a fixed string so that your service worker can cache the request. Change this value each time you rebuild your site. A build timestamp or random string works well.
+
+The search index itself is unaffected and can always be cached.
+
+{{< tabs >}}
+{{< tab "UI (declarative)" "sync-cfg-declarative" >}}
+```html
+<pagefind-config meta-cache-tag="abc123"></pagefind-config>
+```
+{{< /tab >}}
+{{< tab "UI (programmatic)" "sync-cfg-programmatic" >}}
+```js
+configureInstance("default", {
++    metaCacheTag: "abc123"
+});
+```
+{{< /tab >}}
+{{< tab "Search API" "sync-cfg-searchapi" >}}
+```js
+await pagefind.options({
++    metaCacheTag: "abc123"
+});
+```
+{{< /tab >}}
+{{< /tabs >}}
+
 ### Ranking
 
 See [customize ranking](/docs/ranking/)
@@ -204,7 +234,9 @@ By default, Pagefind will attempt to use a web worker for search operations when
 
 {{< tabs >}}
 {{< tab "UI (declarative)" "sync-cfg-declarative" >}}
-Not available as a declarative attribute. Use `configureInstance` instead.
+```html
+<pagefind-config no-worker></pagefind-config>
+```
 {{< /tab >}}
 {{< tab "UI (programmatic)" "sync-cfg-programmatic" >}}
 ```js
